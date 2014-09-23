@@ -7,6 +7,12 @@ module.exports = function (grunt) {
 
   // Define the jsmin-sourcemap task
   grunt.registerMultiTask('jsmin-sourcemap', 'Generate minified JavaScript and sourcemap from files', function () {
+
+    // Set default options
+    this.options = this.options({
+        createSourceMaps : true
+    });
+
     // Grab the files to minify
     var file = this.file,
         data = this.data,
@@ -59,17 +65,25 @@ module.exports = function (grunt) {
     // Grab the minified code
     var code = retObj.code;
 
-    // Append a sourceMappingURL to the code
-    code = code + '\n//@ sourceMappingURL=' + relMapPath;
+    if (this.options.createSourceMaps) {
+        // Append a sourceMappingURL to the code
+        code = code + '\n//@ sourceMappingURL=' + relMapPath;
 
-    // Write out the code and map
+        // Write out the map
+        grunt.file.write(destMap, retObj.sourcemap);
+    }
+
+    // Write out the file
     grunt.file.write(destFile, code);
-    grunt.file.write(destMap, retObj.sourcemap);
 
     // Fail task if errors were logged.
     if (this.errorCount) { return false; }
 
     // Otherwise, print a success message.
-    grunt.log.writeln('Files "' + destFile + '", "' + destMap + '" created.');
+    if (this.options.createSourceMaps) {
+        grunt.log.writeln('Files "' + destFile + '", "' + destMap + '" created.');
+    } else {
+        grunt.log.writeln('Files "' + destFile + '" created.');
+    }
   });
 };

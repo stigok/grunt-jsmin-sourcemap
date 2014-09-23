@@ -43,14 +43,20 @@ grunt.initConfig({
       dest: 'dist/js/all.min.js',
 
       // Destination for sourcemap of minified JavaScript
-      destMap: 'dist/js/all.js.map'
+      destMap: 'dist/js/all.js.map',
 
       // Optional root for all relative URLs
-      srcRoot: 'some/lower/directory'
+      srcRoot: 'some/lower/directory',
 
       // Optional cwd to resolve from for all URLs
       // Converts jquery.js -> some/higher/directory/jquery.js during lookup but mapping preserves jquery.js in map file
-      cwd: 'some/higher/directory'
+      cwd: 'some/higher/directory',
+
+      options: {
+        // Whether to create sourcemaps for the file(s)
+        createSourceMaps: true
+      }
+
     },
 
     // Compact format is also accepted
@@ -58,6 +64,8 @@ grunt.initConfig({
   }
 });
 ```
+
+In some cases, you may want to *only* concatenate and minify the files without creating a source map for them. Use the setting `options.createSourceMaps` (default: `true`) to configures this.
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint via [grunt][grunt] and test via `npm test`.
